@@ -1,28 +1,8 @@
-const blogs = [
-  {
-    id: 1,
-    title: "React Server Components Explained",
-    author: "Dan Abramov",
-    url: "https://react.dev",
-    likes: 12,
-  },
-  {
-    id: 2,
-    title: "Full Stack Open Next.js Journey",
-    author: "Matti Luukkainen",
-    url: "https://fullstackopen.com",
-    likes: 25,
-  },
-  {
-    id: 3,
-    title: "Routing in Next.js App Router",
-    author: "Vercel Team",
-    url: "https://nextjs.org",
-    likes: 8,
-  },
-]
+import { getBlogs } from "../services/blogs"
 
 const Blogs = () => {
+  const blogs = getBlogs()
+
   return (
     <div style={{ maxWidth: "600px", margin: "2rem auto", fontFamily: "sans-serif" }}>
       <h2>Blogs</h2>
