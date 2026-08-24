@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { getBlogs } from "../services/blogs"
 
 const Blogs = () => {
@@ -18,7 +19,9 @@ const Blogs = () => {
               background: "#fafafa" 
             }}
           >
-            <h3 style={{ margin: "0 0 0.5rem 0" }}>{blog.title}</h3>
+            <h3 style={{ margin: "0 0 0.5rem 0" }}>
+              <Link href={`/blogs/${blog.id}`}>{blog.title}</Link>
+            </h3>
             <p style={{ margin: "0 0 0.5rem 0", color: "#555" }}>Author: {blog.author}</p>
             <p style={{ margin: 0, color: "#777" }}>
               Likes: {blog.likes} | <a href={blog.url} target="_blank" rel="noopener noreferrer">Read more</a>
