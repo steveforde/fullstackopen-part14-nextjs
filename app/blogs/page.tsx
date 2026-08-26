@@ -9,7 +9,7 @@ const Blogs = async ({
   const { filter } = await searchParams
   const searchTerm = filter ? filter.toLowerCase() : ""
 
-  const allBlogs = getBlogs()
+  const allBlogs = await getBlogs()
 
   // Exercise 5: Sort descending by likes
   const sortedBlogs = [...allBlogs].sort((a, b) => b.likes - a.likes)
