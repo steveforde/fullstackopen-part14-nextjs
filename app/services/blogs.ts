@@ -12,8 +12,8 @@ export const getBlogById = async (id: number) => {
   })
 }
 
-export const addBlog = async (title: string, author: string, url: string) => {
-  await db.insert(blogs).values({ title, author, url, likes: 0 })
+export const addBlog = async (title: string, author: string, url: string, userId: number) => {
+  await db.insert(blogs).values({ title, author, url, likes: 0, userId })
 }
 
 export const likeBlog = async (id: number) => {

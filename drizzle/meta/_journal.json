@@ -8,6 +8,20 @@
       "when": 1787736459883,
       "tag": "0000_magenta_shooting_star",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1787748584257,
+      "tag": "0001_open_talkback",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1787749396139,
+      "tag": "0002_opposite_the_order",
+      "breakpoints": true
     }
   ]
 }
