@@ -2,15 +2,22 @@
 
 import { redirect } from "next/navigation"
 import { revalidatePath } from "next/cache"
-import { addBlog } from "../services/blogs"
-import { likeBlog } from "../services/blogs"
+import { addBlog, likeBlog } from "../services/blogs"
+import { auth } from "@/auth" // Adjust import if your auth setup differs
 
 export const createBlog = async (formData: FormData) => {
+  const session = await auth()
+  
+  if (!session?.user || !session.user.id) {
+    throw new Error("Unauthorized: You must be logged in to create a blog.")
+  }
+
   const title = formData.get("title") as string
   const author = formData.get("author") as string
   const url = formData.get("url") as string
+  const userId = Number(session.user.id)
 
-  await addBlog(title, author, url, 1) // Make sure 4 arguments are passed
+  await addBlog(title, author, url, userId)
 
   revalidatePath("/blogs")
   redirect("/blogs")
