@@ -20,7 +20,6 @@ export default function NavBar() {
       <Link href="/blogs" style={{ color: "#18181b", textDecoration: "none", fontWeight: 500 }}>blogs</Link>
       <Link href="/users" style={{ color: "#18181b", textDecoration: "none", fontWeight: 500 }}>users</Link>
       <Link href="/blogs/new" style={{ color: "#18181b", textDecoration: "none", fontWeight: 500 }}>create new</Link>
-
       <div style={{ marginLeft: "auto", display: "flex", gap: "1rem", alignItems: "center" }}>
         {session?.user ? (
           <>
@@ -33,7 +32,10 @@ export default function NavBar() {
             </button>
           </>
         ) : (
-          <Link href="/login" style={{ color: "#2563eb", textDecoration: "none", fontWeight: 500 }}>login</Link>
+          <>
+            <Link href="/register" style={{ color: "#2563eb", textDecoration: "none", fontWeight: 500 }}>register</Link>
+            <Link href="/login" style={{ color: "#2563eb", textDecoration: "none", fontWeight: 500 }}>login</Link>
+          </>
         )}
       </div>
     </nav>
