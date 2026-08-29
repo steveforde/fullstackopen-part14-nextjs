@@ -11,20 +11,23 @@ const BlogPage = async ({ params }: { params: Promise<{ id: string }> }) => {
   }
 
   return (
-    <div style={{ maxWidth: "600px", margin: "2rem auto", fontFamily: "sans-serif" }}>
-      <h2>{blog.title}</h2>
-      <p style={{ color: "#555" }}>Author: {blog.author}</p>
-      <p style={{ color: "#777" }}>
-        URL: <a href={blog.url} target="_blank" rel="noopener noreferrer">{blog.url}</a>
-      </p>
-      <p style={{ color: "#777" }}>Likes: {blog.likes}</p>
-      
-      <form action={likeBlogAction}>
-        <input type="hidden" name="id" value={blog.id} />
-        <button type="submit" style={{ padding: "0.5rem 1rem", background: "#0070f3", color: "white", border: "none", borderRadius: "4px", cursor: "pointer" }}>
-          like
-        </button>
-      </form>
+    <div className="page">
+      <div className="card">
+        <h2 className="heading">{blog.title}</h2>
+        <p className="mb-2" style={{ color: "var(--muted)" }}>Author: {blog.author}</p>
+        <p className="mb-4" style={{ color: "var(--muted)" }}>
+          URL:{" "}
+          <a href={blog.url} target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)" }}>
+            {blog.url}
+          </a>
+        </p>
+        <p className="mb-6" style={{ color: "var(--muted)" }}>Likes: {blog.likes}</p>
+
+        <form action={likeBlogAction}>
+          <input type="hidden" name="id" value={blog.id} />
+          <button type="submit" className="btn-primary">like</button>
+        </form>
+      </div>
     </div>
   )
 }

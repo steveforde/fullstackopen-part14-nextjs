@@ -7,34 +7,27 @@ export default function NavBar() {
   const { data: session } = useSession()
 
   return (
-    <nav style={{ 
-      display: "flex", 
-      gap: "1.5rem", 
-      padding: "1rem 2rem", 
-      background: "#f4f4f5", 
-      borderBottom: "1px solid #e4e4e7",
-      color: "#18181b",
-      alignItems: "center"
-    }}>
-      <Link href="/" style={{ color: "#18181b", textDecoration: "none", fontWeight: 500 }}>home</Link>
-      <Link href="/blogs" style={{ color: "#18181b", textDecoration: "none", fontWeight: 500 }}>blogs</Link>
-      <Link href="/users" style={{ color: "#18181b", textDecoration: "none", fontWeight: 500 }}>users</Link>
-      <Link href="/blogs/new" style={{ color: "#18181b", textDecoration: "none", fontWeight: 500 }}>create new</Link>
-      <div style={{ marginLeft: "auto", display: "flex", gap: "1rem", alignItems: "center" }}>
+    <nav className="navbar">
+      <div className="flex gap-2 items-center">
+        <Link href="/" className="nav-link">home</Link>
+        <Link href="/blogs" className="nav-link">blogs</Link>
+        <Link href="/users" className="nav-link">users</Link>
+        <Link href="/blogs/new" className="nav-link">create new</Link>
+      </div>
+      <div className="flex gap-3 items-center">
         {session?.user ? (
           <>
-            <span style={{ fontSize: "0.9rem" }}>{session.user.name} logged in</span>
-            <button 
-              onClick={() => signOut()}
-              style={{ padding: "0.4rem 0.8rem", background: "#ef4444", color: "#fff", border: "none", borderRadius: "4px", cursor: "pointer" }}
-            >
+            <span className="text-sm" style={{ color: "var(--muted)" }}>
+              {session.user.name} logged in
+            </span>
+            <button onClick={() => signOut()} className="btn-danger">
               logout
             </button>
           </>
         ) : (
           <>
-            <Link href="/register" style={{ color: "#2563eb", textDecoration: "none", fontWeight: 500 }}>register</Link>
-            <Link href="/login" style={{ color: "#2563eb", textDecoration: "none", fontWeight: 500 }}>login</Link>
+            <Link href="/register" className="nav-link" style={{ color: "var(--accent)" }}>register</Link>
+            <Link href="/login" className="nav-link" style={{ color: "var(--accent)" }}>login</Link>
           </>
         )}
       </div>

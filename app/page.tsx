@@ -1,8 +1,12 @@
 export default function Home() {
   return (
-    <div style={{ padding: "2rem", color: "#333", background: "#fff", minHeight: "100vh" }}>
-      <h1>Home Page</h1>
-      <p>Welcome to your Full Stack Open Next.js application!</p>
+    <div className="page">
+      <div className="card">
+        <h1 className="heading">Home Page</h1>
+        <p style={{ color: "var(--muted)" }}>
+          Welcome to your Full Stack Open Next.js application!
+        </p>
+      </div>
     </div>
   )
 }

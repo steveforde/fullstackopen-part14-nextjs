@@ -19,17 +19,22 @@ export default async function UserPage({ params }: { params: Promise<{ username:
   }
 
   return (
-    <div>
-      <h1>{user.name}</h1>
-      <p>Username: {user.username}</p>
-      <h2>Blogs</h2>
-      <ul>
-        {user.blogs.map((blog) => (
-          <li key={blog.id}>
-            <Link href={`/blogs/${blog.id}`}>{blog.title}</Link>
-          </li>
-        ))}
-      </ul>
+    <div className="page">
+      <div className="card">
+        <h1 className="heading">{user.name}</h1>
+        <p className="mb-6" style={{ color: "var(--muted)" }}>Username: {user.username}</p>
+
+        <h2 className="text-lg font-semibold mb-3">Blogs</h2>
+        <ul className="flex flex-col gap-2">
+          {user.blogs.map((blog) => (
+            <li key={blog.id}>
+              <Link href={`/blogs/${blog.id}`} className="nav-link" style={{ color: "var(--accent)" }}>
+                {blog.title}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   )
 }
