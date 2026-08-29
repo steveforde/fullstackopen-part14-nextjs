@@ -3,6 +3,9 @@
 import { redirect } from "next/navigation"
 import bcrypt from "bcryptjs"
 import { getUserByUsername, createUser } from "../services/users"
+import { auth } from "@/auth"
+import { updateUserToken } from "../services/users"
+import { revalidatePath } from "next/cache"
 
 export const registerUser = async (
   prevState: { error: string; values?: { username: string } },
@@ -31,4 +34,16 @@ export const registerUser = async (
   await createUser(username, passwordHash)
 
   redirect("/login")
+}
+
+export const generateTokenAction = async () => {
+  const session = await auth()
+
+  if (!session?.user?.email) {
+    throw new Error("Unauthorized")
+  }
+
+  const token = crypto.randomUUID()
+  await updateUserToken(session.user.email, token)
+  revalidatePath("/me")
 }

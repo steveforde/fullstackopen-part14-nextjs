@@ -18,3 +18,7 @@ export const createUser = async (username: string, passwordHash: string) => {
     name: username 
   })
 }
+
+export const updateUserToken = async (username: string, token: string) => {
+  await db.update(users).set({ token }).where(eq(users.username, username))
+}

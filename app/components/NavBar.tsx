@@ -17,6 +17,7 @@ export default function NavBar() {
       <div className="flex gap-3 items-center">
         {session?.user ? (
           <>
+          <Link href="/me" className="nav-link">me</Link>
             <span className="text-sm" style={{ color: "var(--muted)" }}>
               {session.user.name} logged in
             </span>
