@@ -12,7 +12,15 @@ export async function GET(request: NextRequest) {
 
   const token = authHeader.replace('Bearer ', '')
 
-  const userList = await db.select().from(users).where(eq(users.token, token)).limit(1)
+  const userList = await db
+    .select({
+      id: users.id,
+      username: users.username,
+      name: users.name,
+    })
+    .from(users)
+    .where(eq(users.token, token))
+    .limit(1)
   const user = userList[0]
 
   if (!user) {
