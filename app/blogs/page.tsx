@@ -20,46 +20,46 @@ const Blogs = async ({
     : sortedBlogs
 
   return (
-    <div style={{ maxWidth: "600px", margin: "2rem auto", fontFamily: "sans-serif" }}>
-      <h2>Blogs</h2>
+    <div className="page">
+      <h2 className="heading">Blogs</h2>
 
-      {/* Search Form and Clear Link */}
-      <form method="GET" style={{ marginBottom: "1.5rem", display: "flex", gap: "0.5rem", alignItems: "center" }}>
-        <input 
-          type="text" 
-          name="filter" 
-          defaultValue={filter || ""} 
-          placeholder="Search by title..." 
-          style={{ flex: 1, padding: "0.5rem" }} 
+      <form method="GET" className="flex gap-2 items-center mb-6">
+        <input
+          type="text"
+          name="filter"
+          defaultValue={filter || ""}
+          placeholder="Search by title..."
+          className="flex-1 rounded-md px-3 py-2 outline-none"
+          style={{ background: "var(--surface)", border: "1px solid var(--border)", color: "var(--foreground)" }}
         />
-        <button type="submit" style={{ padding: "0.5rem 1rem", background: "#0070f3", color: "white", border: "none", borderRadius: "4px", cursor: "pointer" }}>
+        <button type="submit" className="btn-primary">
           search
         </button>
         {filter && (
-          <Link href="/blogs" style={{ padding: "0.5rem 1rem", background: "#ccc", color: "#333", textDecoration: "none", borderRadius: "4px" }}>
+          <Link
+            href="/blogs"
+            className="rounded-md px-4 py-2 font-medium"
+            style={{ background: "var(--border)", color: "var(--foreground)" }}
+          >
             clear
           </Link>
         )}
       </form>
 
-      <ul style={{ listStyleType: "none", padding: 0 }}>
+      <ul className="flex flex-col gap-3">
         {blogs.map((blog) => (
-          <li 
-            key={blog.id} 
-            style={{ 
-              padding: "1rem", 
-              marginBottom: "1rem", 
-              border: "1px solid #ddd", 
-              borderRadius: "6px",
-              background: "#fafafa" 
-            }}
-          >
-           <h3 style={{ margin: "0 0 0.5rem 0" }}>
-            <Link href={`/blogs/${blog.id}`} style={{ color: "#18181b", textDecoration: "none" }}>{blog.title}</Link>
-          </h3>
-            <p style={{ margin: "0 0 0.5rem 0", color: "#555" }}>Author: {blog.author}</p>
-            <p style={{ margin: 0, color: "#777" }}>
-              Likes: {blog.likes} | <a href={blog.url} target="_blank" rel="noopener noreferrer">Read more</a>
+          <li key={blog.id} className="card">
+            <h3 className="mb-2">
+              <Link href={`/blogs/${blog.id}`} className="font-semibold text-lg hover:underline">
+                {blog.title}
+              </Link>
+            </h3>
+            <p className="mb-1" style={{ color: "var(--muted)" }}>Author: {blog.author}</p>
+            <p style={{ color: "var(--muted)" }}>
+              Likes: {blog.likes} |{" "}
+              <a href={blog.url} target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent)" }}>
+                Read more
+              </a>
             </p>
           </li>
         ))}
