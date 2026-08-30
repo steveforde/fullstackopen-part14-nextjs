@@ -2,6 +2,7 @@ import { auth } from "@/auth"
 import { redirect } from "next/navigation"
 import { getUserByUsername } from "../services/users"
 import { generateTokenAction } from "../actions/users"
+import { getReadingList } from "../actions/blogs"
 
 export default async function MePage() {
   const session = await auth()
@@ -15,6 +16,8 @@ export default async function MePage() {
   if (!user) {
     redirect("/login")
   }
+
+  const readingList = await getReadingList(user.id)
 
   return (
     <div className="page">
@@ -50,6 +53,25 @@ export default async function MePage() {
         <form action={generateTokenAction}>
           <button type="submit" className="btn-primary">Generate New Token</button>
         </form>
+
+        <hr className="mb-6 mt-6" style={{ borderColor: "var(--border)" }} />
+
+        <h3 className="text-lg font-semibold mb-3">My Reading List</h3>
+
+        {readingList.length === 0 ? (
+          <p style={{ color: "var(--muted)" }}>Your reading list is empty.</p>
+        ) : (
+          <ul>
+            {readingList.map((item) => (
+              <li key={item.id} className="mb-2">
+                <a href={`/blogs/${item.blogId}`} style={{ color: "var(--accent)" }}>
+                  {item.title}
+                </a>
+                {" "}by {item.author} {item.read ? "✅" : ""}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   )

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation"
 import { getBlogById } from "../../services/blogs"
-import { likeBlogAction } from "../../actions/blogs"
+import { likeBlogAction, addToReadingListAction } from "../../actions/blogs"
+import { auth } from "@/auth"
 
 const BlogPage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params
@@ -9,6 +10,11 @@ const BlogPage = async ({ params }: { params: Promise<{ id: string }> }) => {
   if (!blog) {
     notFound()
   }
+
+  const session = await auth()
+  const user = session?.user
+
+  const showAddToReadingList = user && Number(user.id) !== blog.userId
 
   return (
     <div className="page">
@@ -23,10 +29,21 @@ const BlogPage = async ({ params }: { params: Promise<{ id: string }> }) => {
         </p>
         <p className="mb-6" style={{ color: "var(--muted)" }}>Likes: {blog.likes}</p>
 
-        <form action={likeBlogAction}>
-          <input type="hidden" name="id" value={blog.id} />
-          <button type="submit" className="btn-primary">like</button>
-        </form>
+        <div className="flex gap-4 items-center">
+          <form action={likeBlogAction}>
+            <input type="hidden" name="id" value={blog.id} />
+            <button type="submit" className="btn-primary">like</button>
+          </form>
+
+          {showAddToReadingList && (
+            <form action={addToReadingListAction}>
+              <input type="hidden" name="blogId" value={blog.id} />
+              <button type="submit" className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md font-medium">
+                add to reading list
+              </button>
+            </form>
+          )}
+        </div>
       </div>
     </div>
   )

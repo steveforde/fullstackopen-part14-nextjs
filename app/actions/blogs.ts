@@ -1,44 +1,101 @@
 "use server"
 
-import { revalidatePath } from "next/cache"
-import { addBlog, likeBlog } from "../services/blogs"
-import { auth } from "@/auth"
+import { db } from '@/db'
+import { blogs, readingList } from '@/db/schema'
+import { eq, and } from 'drizzle-orm'
+import { revalidatePath } from 'next/cache'
+import { auth } from '@/auth'
 
-export const createBlog = async (
-  prevState: { error: string; success?: boolean; values?: { title: string; author: string; url: string } },
-  formData: FormData
-) => {
+export async function likeBlogAction(formData: FormData) {
+  const id = Number(formData.get("id"))
+
+  const [blog] = await db.select().from(blogs).where(eq(blogs.id, id))
+  if (!blog) return
+
+  await db.update(blogs)
+    .set({ likes: blog.likes + 1 })
+    .where(eq(blogs.id, id))
+
+  revalidatePath(`/blogs/${id}`)
+  revalidatePath('/blogs')
+}
+
+export async function addToReadingListAction(formData: FormData) {
+  const blogId = Number(formData.get("blogId"))
   const session = await auth()
-  
-  if (!session?.user || !session.user.id) {
-    throw new Error("Unauthorized: You must be logged in to create a blog.")
+
+  if (!session?.user) return
+
+  const user = session.user
+
+  // Check if already in reading list
+  const existing = await db.select().from(readingList).where(
+    and(eq(readingList.userId, Number(user.id)), eq(readingList.blogId, blogId))
+  )
+
+  if (existing.length === 0) {
+    await db.insert(readingList).values({
+      userId: Number(user.id),
+      blogId,
+      read: false,
+    })
   }
 
+  revalidatePath(`/blogs/${blogId}`)
+  revalidatePath('/me')
+}
+
+export async function createBlog(
+  prevState: { error: string; success: boolean; values: { title: string; author: string; url: string } },
+  formData: FormData
+) {
   const title = formData.get("title") as string
   const author = formData.get("author") as string
   const url = formData.get("url") as string
 
-  if (!title || title.length < 5) {
-    return { error: "Title must be at least 5 characters long", success: false, values: { title, author, url } }
-  }
-  if (!author || author.length < 5) {
-    return { error: "Author must be at least 5 characters long", success: false, values: { title, author, url } }
-  }
-  if (!url || url.length < 5) {
-    return { error: "URL must be at least 5 characters long", success: false, values: { title, author, url } }
+  const values = { title, author, url }
+
+  const session = await auth()
+  if (!session?.user) {
+    return { error: "You must be logged in", success: false, values }
   }
 
-  const userId = Number(session.user.id)
+  if (!title || !author || !url) {
+    return { error: "All fields are required", success: false, values }
+  }
 
-  await addBlog(title, author, url, userId)
+  const [newBlog] = await db.insert(blogs).values({
+    title,
+    author,
+    url,
+    likes: 0,
+    userId: Number(session.user.id),
+  }).returning()
 
-  revalidatePath("/blogs")
-  return { error: "", success: true }
+  // Automatically add to the creator's own reading list
+  await db.insert(readingList).values({
+    userId: Number(session.user.id),
+    blogId: newBlog.id,
+    read: false,
+  })
+
+  revalidatePath('/blogs')
+  revalidatePath('/me')
+
+  return { error: "", success: true, values: { title: "", author: "", url: "" } }
 }
 
-export const likeBlogAction = async (formData: FormData) => {
-  const id = Number(formData.get("id"))
-  await likeBlog(id)
-  revalidatePath(`/blogs/${id}`)
-  revalidatePath("/blogs")
+export async function getReadingList(userId: number) {
+  return db
+    .select({
+      id: readingList.id,
+      read: readingList.read,
+      blogId: blogs.id,
+      title: blogs.title,
+      author: blogs.author,
+      url: blogs.url,
+    })
+    .from(readingList)
+    .innerJoin(blogs, eq(readingList.blogId, blogs.id))
+    .where(eq(readingList.userId, userId))
 }
