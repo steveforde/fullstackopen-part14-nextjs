@@ -149,12 +149,12 @@ a {
 }
 
 .markdown a {
-  color: #f0f0f0;
+  color: #3b82f6;
   text-decoration: underline;
 }
 
 .markdown a:hover {
-  color: #aaa;
+  color: #2563eb;
 }
 
 .markdown ul {
