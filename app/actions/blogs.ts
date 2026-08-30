@@ -99,3 +99,16 @@ export async function getReadingList(userId: number) {
     .innerJoin(blogs, eq(readingList.blogId, blogs.id))
     .where(eq(readingList.userId, userId))
 }
+
+export async function markAsReadAction(formData: FormData) {
+  const id = Number(formData.get("id"))
+  const session = await auth()
+
+  if (!session?.user) return
+
+  await db.update(readingList)
+    .set({ read: true })
+    .where(and(eq(readingList.id, id), eq(readingList.userId, Number(session.user.id))))
+
+  revalidatePath('/me')
+}

@@ -2,7 +2,7 @@ import { auth } from "@/auth"
 import { redirect } from "next/navigation"
 import { getUserByUsername } from "../services/users"
 import { generateTokenAction } from "../actions/users"
-import { getReadingList } from "../actions/blogs"
+import { getReadingList, markAsReadAction } from "../actions/blogs"
 
 export default async function MePage() {
   const session = await auth()
@@ -18,6 +18,8 @@ export default async function MePage() {
   }
 
   const readingList = await getReadingList(user.id)
+  const unread = readingList.filter((item) => !item.read)
+  const read = readingList.filter((item) => item.read)
 
   return (
     <div className="page">
@@ -56,18 +58,39 @@ export default async function MePage() {
 
         <hr className="mb-6 mt-6" style={{ borderColor: "var(--border)" }} />
 
-        <h3 className="text-lg font-semibold mb-3">My Reading List</h3>
+        <h3 className="text-lg font-semibold mb-3">Reading List</h3>
 
-        {readingList.length === 0 ? (
-          <p style={{ color: "var(--muted)" }}>Your reading list is empty.</p>
+        <h4 className="font-semibold mb-2">Unread ({unread.length})</h4>
+        {unread.length === 0 ? (
+          <p className="mb-4" style={{ color: "var(--muted)" }}>Nothing unread.</p>
+        ) : (
+          <ul className="mb-4">
+            {unread.map((item) => (
+              <li key={item.id} className="flex items-center justify-between mb-2">
+                <a href={`/blogs/${item.blogId}`} style={{ color: "var(--accent)" }}>
+                  {item.title}
+                </a>
+                <form action={markAsReadAction}>
+                  <input type="hidden" name="id" value={item.id} />
+                  <button type="submit" className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md text-sm">
+                    mark as read
+                  </button>
+                </form>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        <h4 className="font-semibold mb-2">Read ({read.length})</h4>
+        {read.length === 0 ? (
+          <p style={{ color: "var(--muted)" }}>Nothing read yet.</p>
         ) : (
           <ul>
-            {readingList.map((item) => (
+            {read.map((item) => (
               <li key={item.id} className="mb-2">
                 <a href={`/blogs/${item.blogId}`} style={{ color: "var(--accent)" }}>
                   {item.title}
                 </a>
-                {" "}by {item.author} {item.read ? "✅" : ""}
               </li>
             ))}
           </ul>
