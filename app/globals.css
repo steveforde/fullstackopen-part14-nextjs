@@ -116,3 +116,67 @@ a {
     background: rgba(255, 255, 255, 0.05);
   }
 }
+
+.markdown {
+  max-width: 700px;
+  margin: 3rem auto;
+  padding: 0 1.5rem;
+  color: #f0f0f0;
+}
+
+.markdown h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin: 1.5rem 0 1rem;
+  text-align: center;
+}
+
+.markdown h2 {
+  font-size: 1.875rem;
+  font-weight: bold;
+  margin: 2rem 0 0.75rem;
+}
+
+.markdown h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 1.5rem 0 0.5rem;
+}
+
+.markdown p {
+  margin: 1rem 0;
+  line-height: 1.7;
+}
+
+.markdown a {
+  color: #f0f0f0;
+  text-decoration: underline;
+}
+
+.markdown a:hover {
+  color: #aaa;
+}
+
+.markdown ul {
+  margin: 1rem 0;
+  padding-left: 2rem;
+  line-height: 1.7;
+  list-style-type: disc;
+}
+
+.markdown ol {
+  margin: 1rem 0;
+  padding-left: 2rem;
+  line-height: 1.7;
+  list-style-type: decimal;
+}
+
+.markdown li {
+  margin: 0.5rem 0;
+}
+
+.markdown hr {
+  margin: 2rem 0;
+  border: none;
+  border-top: 1px solid #444;
+}
