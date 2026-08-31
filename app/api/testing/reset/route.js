@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { db } from '../../../../db'
-import { users, blogs } from '../../../../db/schema'
+import { users, blogs, readingList } from '../../../../db/schema'
 
 export async function DELETE() {
   if (process.env.NODE_ENV === 'production') {
@@ -12,6 +12,7 @@ export async function DELETE() {
 
   // blogs has a foreign key to users, so delete blogs first
   await db.delete(blogs)
+  await db.delete(readingList)
   await db.delete(users)
 
   return NextResponse.json({ message: 'Database reset' })
