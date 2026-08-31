@@ -11,9 +11,9 @@ export async function DELETE() {
   }
 
   // blogs has a foreign key to users, so delete blogs first
-  await db.delete(blogs)
-  await db.delete(readingList)
-  await db.delete(users)
+await db.delete(readingList)
+await db.delete(blogs)
+await db.delete(users)
 
   return NextResponse.json({ message: 'Database reset' })
 }
